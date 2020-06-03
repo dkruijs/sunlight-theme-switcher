@@ -6,7 +6,7 @@ Gnome 3 daylight dark/light theme switcher
 This package is meant to be run as a cron job, and will change required settings in Gnome 3 based on regularly updated sunrise/sunset times. Updated times are calculated off-line by the `astral` package.
 
 ### Setting up 
-Create a weekly cron job as follows (with the specified time and frequency you desire): 
+Create a cron job as follows (with the specified time and frequency you desire): 
 ```
 0 11 * * 0
 python -c 'from theme_switcher import update_sunrise_sunset; update_sunrise_sunset()'
