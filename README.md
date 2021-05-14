@@ -1,28 +1,19 @@
 Gnome 3 daylight dark/light theme switcher
 ---
 
-***Work in progress***
-
-This package is meant to be run as a cron job, and will change required settings in Gnome 3 based on regularly updated sunrise/sunset times. Updated times are calculated off-line by the `astral` package.
-
 ### Setting up 
-Create a cron job as follows (with the specified time and frequency you desire): 
+Create a recurring anacron job as follows (by adding it to `/etc/cron.{daily|weekly|monthly}`): 
 ```
-0 11 * * 0
-python -c 'from theme_switcher import update_sunrise_sunset; update_sunrise_sunset()'
+# period delay job-identifier command
+3 5 daylight-theme-switcher python -c 'from theme_switcher import update_sunrise_sunset; update_sunrise_sunset()'
 ```
-This function will retrieve updated sunrise and sunset times, and use this data to insert (on the first run) or update (on subsequent runs) your crontab with a cron job for switching the user-configured 'light mode' and 'dark mode' settings automatically, by default at sunrise and sunset. 
+(or use some custom cron job if desired)
 
-You can set a desired relative delta in your config file in hours and minutes if you prefer to trigger the settings changes earlier or later.
-
-Set up location information (based on `astral`'s requirements) in an `.env` file in your root folder as such:
+### How it works
+This job will periodically update your crontab with a job that automatically switches dark and light themes depending on sunrise/sunset times, such as the following example:
 ```
-CITY='Amsterdam'
-COUNTRY='Netherlands'
-TIMEZONE='Europe/Amsterdam'
-LATITUDE='52.4'
-LONGITUDE='-4.9'
+# m h dom mon dow user  command
+45 5 * * 0 python -c 'from theme_switcher import set_light_theme; set_light_theme()'  # sunrise @ 05:45
+28 21 * * 0 python -c 'from theme_switcher import set_dark_theme; set_dark_theme()'  # sunset @ 21:28
 ```
-
-### Installation
-_Coming soon._
+Using only pure python and GTK commands. Tested on Ubuntu 20.04.2 LTS with GNOME 3 desktop version 3.36.8.
